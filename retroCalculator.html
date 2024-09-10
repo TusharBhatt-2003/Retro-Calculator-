@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Retro Calculator</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=VT323&display=swap');
+    </style>
+</head>
+<body class="bg-[#fff1f2] h-screen flex items-center justify-center font-['VT323']">
+    <div class="bg-[#faf5e0] p-6 rounded-lg shadow-lg w-72">
+        <div class="bg-[#9c9f84] p-4 rounded mb-4">
+            <input id="display" type="text" class="w-full text-right text-4xl bg-transparent outline-none" value="0" readonly>
+        </div>
+        <div class="grid grid-cols-4 gap-2">
+            <button class="bg-[#313857] text-white text-2xl p-4 rounded hover:bg-[#402e52] transition-colors" onclick="clearDisplay()">C</button>
+            <button class="bg-[#bd6773] text-white text-2xl p-4 rounded hover:bg-[#c77997] transition-colors" onclick="toggleSign()">+/-</button>
+            <button class="bg-[#bd6773] text-white text-2xl p-4 rounded hover:bg-[#c77997] transition-colors" onclick="percent()">%</button>
+            <button class="bg-[#f99973] text-white text-2xl p-4 rounded hover:bg-[#f17f0a] transition-colors" onclick="appendOperator('÷')">÷</button>
+            <button class="bg-[#087167] text-white text-2xl p-4 rounded hover:bg-[#86c7d6] transition-colors" onclick="appendNumber(7)">7</button>
+            <button class="bg-[#087167] text-white text-2xl p-4 rounded hover:bg-[#86c7d6] transition-colors" onclick="appendNumber(8)">8</button>
+            <button class="bg-[#087167] text-white text-2xl p-4 rounded hover:bg-[#86c7d6] transition-colors" onclick="appendNumber(9)">9</button>
+            <button class="bg-[#f99973] text-white text-2xl p-4 rounded hover:bg-[#f17f0a] transition-colors" onclick="appendOperator('X')">X</button>
+            <button class="bg-[#087167] text-white text-2xl p-4 rounded hover:bg-[#86c7d6] transition-colors" onclick="appendNumber(4)">4</button>
+            <button class="bg-[#087167] text-white text-2xl p-4 rounded hover:bg-[#86c7d6] transition-colors" onclick="appendNumber(5)">5</button>
+            <button class="bg-[#087167] text-white text-2xl p-4 rounded hover:bg-[#86c7d6] transition-colors" onclick="appendNumber(6)">6</button>
+            <button class="bg-[#f99973] text-white text-2xl p-4 rounded hover:bg-[#f17f0a] transition-colors" onclick="appendOperator('-')">-</button>
+            <button class="bg-[#087167] text-white text-2xl p-4 rounded hover:bg-[#86c7d6] transition-colors" onclick="appendNumber(1)">1</button>
+            <button class="bg-[#087167] text-white text-2xl p-4 rounded hover:bg-[#86c7d6] transition-colors" onclick="appendNumber(2)">2</button>
+            <button class="bg-[#087167] text-white text-2xl p-4 rounded hover:bg-[#86c7d6] transition-colors" onclick="appendNumber(3)">3</button>
+            <button class="bg-[#f99973] text-white text-2xl p-4 rounded hover:bg-[#f17f0a] transition-colors" onclick="appendOperator('+')">+</button>
+            <button class="bg-[#087167] text-white text-2xl p-4 rounded hover:bg-[#86c7d6] transition-colors col-span-2" onclick="appendNumber(0)">0</button>
+            <button class="bg-[#087167] text-white text-2xl p-4 rounded hover:bg-[#86c7d6] transition-colors" onclick="appendDot()">.</button>
+            <button class="bg-[#741d29] text-white text-2xl p-4 rounded hover:bg-[#895159] transition-colors" onclick="calculate()">=</button>
+        </div>
+    </div>
+
+    <script>
+        let currentInput = '';
+        let previousInput = '';
+        let operator = '';
+
+        function clearDisplay() {
+            currentInput = '';
+            previousInput = '';
+            operator = '';
+            updateDisplay('0');
+        }
+
+        function updateDisplay() {
+            let displayValue = previousInput + ' ' + operator + ' ' + currentInput;
+            document.getElementById('display').value = displayValue.trim() || '0';
+        }
+
+        function appendNumber(number) {
+            currentInput += number;
+            updateDisplay();
+        }
+
+        function appendOperator(op) {
+            if (currentInput === '' && previousInput === '') return;
+            if (previousInput !== '' && currentInput !== '') {
+                calculate();
+            }
+            operator = op;
+            if (currentInput !== '') {
+                previousInput = currentInput;
+                currentInput = '';
+            }
+            updateDisplay();
+        }
+
+        function appendDot() {
+            if (!currentInput.includes('.')) {
+                currentInput += '.';
+                updateDisplay();
+            }
+        }
+
+        function toggleSign() {
+            if (currentInput !== '') {
+                currentInput = currentInput.startsWith('-') ? currentInput.substring(1) : '-' + currentInput;
+                updateDisplay();
+            }
+        }
+
+        function percent() {
+            if (currentInput !== '') {
+                currentInput = (parseFloat(currentInput) / 100).toString();
+                updateDisplay();
+            }
+        }
+
+        function calculate() {
+            let result;
+            let prev = parseFloat(previousInput);
+            let current = parseFloat(currentInput);
+
+            if (isNaN(prev) || isNaN(current)) return;
+
+            switch (operator) {
+                case '+':
+                    result = prev + current;
+                    break;
+                case '-':
+                    result = prev - current;
+                    break;
+                case 'X':
+                    result = prev * current;
+                    break;
+                case '÷':
+                    result = prev / current;
+                    break;
+                default:
+                    return;
+            }
+
+            currentInput = result.toString();
+            previousInput = '';
+            operator = '';
+            updateDisplay();
+        }
+    </script>
+</body>
+</html>
