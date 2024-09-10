@@ -15,9 +15,10 @@
             <input id="display" type="text" class="w-full text-right text-4xl bg-transparent outline-none" value="0" readonly>
         </div>
         <div class="grid grid-cols-4 gap-2">
-            <button class="bg-[#313857] text-white text-2xl p-4 rounded hover:bg-[#402e52] transition-colors" onclick="clearDisplay()">C</button>
             <button class="bg-[#bd6773] text-white text-2xl p-4 rounded hover:bg-[#c77997] transition-colors" onclick="toggleSign()">+/-</button>
             <button class="bg-[#bd6773] text-white text-2xl p-4 rounded hover:bg-[#c77997] transition-colors" onclick="percent()">%</button>
+            <button class="bg-[#313857] text-white text-2xl p-4 rounded hover:bg-[#402e52] transition-colors" onclick="clearDisplay()">C</button>
+            <button class="bg-[#313857] text-white text-2xl p-4 rounded hover:bg-[#402e52] transition-colors" onclick="deleteLast()">←</button>
             <button class="bg-[#f99973] text-white text-2xl p-4 rounded hover:bg-[#f17f0a] transition-colors" onclick="appendOperator('÷')">÷</button>
             <button class="bg-[#087167] text-white text-2xl p-4 rounded hover:bg-[#86c7d6] transition-colors" onclick="appendNumber(7)">7</button>
             <button class="bg-[#087167] text-white text-2xl p-4 rounded hover:bg-[#86c7d6] transition-colors" onclick="appendNumber(8)">8</button>
@@ -31,7 +32,7 @@
             <button class="bg-[#087167] text-white text-2xl p-4 rounded hover:bg-[#86c7d6] transition-colors" onclick="appendNumber(2)">2</button>
             <button class="bg-[#087167] text-white text-2xl p-4 rounded hover:bg-[#86c7d6] transition-colors" onclick="appendNumber(3)">3</button>
             <button class="bg-[#f99973] text-white text-2xl p-4 rounded hover:bg-[#f17f0a] transition-colors" onclick="appendOperator('+')">+</button>
-            <button class="bg-[#087167] text-white text-2xl p-4 rounded hover:bg-[#86c7d6] transition-colors col-span-2" onclick="appendNumber(0)">0</button>
+            <button class="bg-[#087167] text-white text-2xl p-4 rounded hover:bg-[#86c7d6] transition-colors" onclick="appendNumber(0)">0</button>
             <button class="bg-[#087167] text-white text-2xl p-4 rounded hover:bg-[#86c7d6] transition-colors" onclick="appendDot()">.</button>
             <button class="bg-[#741d29] text-white text-2xl p-4 rounded hover:bg-[#895159] transition-colors" onclick="calculate()">=</button>
         </div>
@@ -89,6 +90,13 @@
         function percent() {
             if (currentInput !== '') {
                 currentInput = (parseFloat(currentInput) / 100).toString();
+                updateDisplay();
+            }
+        }
+
+        function deleteLast() {
+            if (currentInput !== '') {
+                currentInput = currentInput.slice(0, -1);
                 updateDisplay();
             }
         }
